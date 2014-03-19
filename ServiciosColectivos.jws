@@ -1,5 +1,8 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <jws:workspace xmlns:jws="http://xmlns.oracle.com/ide/project">
+   <hash n="adrs-workspace-properties">
+      <value n="adrs-instance-binding" v="DefaultServer"/>
+   </hash>
    <value n="application-package-prefix" v="cl.bicevida.services.colectivos"/>
    <value n="appTemplateId" v="javaEEWebAppTemplate"/>
    <hash n="component-versions">
@@ -22,6 +25,7 @@
    </list>
    <list n="listOfChildren">
       <hash><url n="URL" path="Model/Model.jpr"/></hash>
+      <hash><url n="URL" path="RestServices/RestServices.jpr"/></hash>
       <hash><url n="URL" path="ViewController/ViewController.jpr"/></hash>
    </list>
 </jws:workspace>
