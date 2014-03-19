@@ -11,5 +11,8 @@ public class PolizaEJBBean implements PolizaEJB {
     SessionContext sessionContext;
 
     public PolizaEJBBean() {
+        /**hola*/
     }
+    
+    
 }
