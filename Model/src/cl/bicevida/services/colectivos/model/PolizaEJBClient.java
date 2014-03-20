@@ -16,10 +16,10 @@ public class PolizaEJBClient {
         try {
             final Context context = getInitialContext();
             PolizaEJB polizaEJB =
-                (PolizaEJB)context.lookup("TestLiquidadorWeb-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
+                (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
             
             GetPolizaIn gpIn = new GetPolizaIn();
-            gpIn.setNumeroPoliza(176903);
+            gpIn.setNumeroPoliza(143915);
             GetPolizaOut result = polizaEJB.getPoliza(gpIn);
             System.out.println(result.getPoliza().getContratante().getNombre());
             
