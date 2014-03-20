@@ -159,7 +159,7 @@ public class PolizaEJBBean implements PolizaEJB {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 poliza = mapeoPoliza(rs);
-                result.addPoliza(poliza);
+                result.setPoliza(poliza);
             }            
         } catch (SQLException e) {
             e.printStackTrace();            

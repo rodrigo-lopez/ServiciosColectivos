@@ -12,30 +12,24 @@ public class GetPolizaMasNuevaLiquidableByTitularOut implements Serializable {
     @SuppressWarnings("compatibility")
     private static final long serialVersionUID = 1L;
     
-    private List <PolizaDTO> polizaList;
+    private PolizaDTO poliza;
 
 
     public GetPolizaMasNuevaLiquidableByTitularOut() {
         super();
     }
 
-    public GetPolizaMasNuevaLiquidableByTitularOut(List<PolizaDTO> polizaList) {
+    public GetPolizaMasNuevaLiquidableByTitularOut(PolizaDTO poliza) {
         super();
-        this.polizaList = polizaList;
+        this.poliza = poliza;
     }
 
 
-    public void setPolizaList(List<PolizaDTO> polizaList) {
-        this.polizaList = polizaList;
+    public void setPoliza(PolizaDTO poliza) {
+        this.poliza = poliza;
     }
 
-    public List<PolizaDTO> getPolizaList() {
-        return polizaList;
-    }
-    
-    public void addPoliza(PolizaDTO poliza) {
-        if (polizaList == null)
-            polizaList = new ArrayList <PolizaDTO> ();
-        polizaList.add(poliza);
+    public PolizaDTO getPoliza() {
+        return poliza;
     }
 }
