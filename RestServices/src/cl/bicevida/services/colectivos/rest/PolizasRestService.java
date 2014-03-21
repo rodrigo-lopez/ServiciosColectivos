@@ -49,7 +49,7 @@ public class PolizasRestService {
     @Path("{numeroPoliza}")
     @Produces({"application/json", "application/xml"})
     public PolizaDTO getPoliza(@PathParam("numeroPoliza") Integer numeroPoliza) throws NamingException {        
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
+        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetPolizaIn gpIn = new GetPolizaIn();
         gpIn.setNumeroPoliza(numeroPoliza);
@@ -61,7 +61,7 @@ public class PolizasRestService {
     @Path("titular/{rut}")
     @Produces({"application/json", "application/xml"})
     public PolizaDTO getPolizaMasNuevaLiquidableByTitular(@PathParam("rut") String rut) throws NamingException {        
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
+        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetPolizaMasNuevaLiquidableByTitularIn in = new GetPolizaMasNuevaLiquidableByTitularIn();
         in.setRut(rut);
@@ -75,7 +75,7 @@ public class PolizasRestService {
             @PathParam("numeroPoliza") Integer numeroPoliza, 
             @PathParam("rutTitular") String rutTitular) 
     {
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
+        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetGrupoFamiliarIn ggfIn = new GetGrupoFamiliarIn();
         ggfIn.setRutAsegurado(rutTitular);
@@ -95,7 +95,7 @@ public class PolizasRestService {
             @PathParam("tipoBeneficiario") String tipoBeneficiario
             ) 
     {
-        response.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
+        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetPrestacionesPorGrupoIn in = new GetPrestacionesPorGrupoIn();
         String strNumPol = numeroPoliza.toString();
