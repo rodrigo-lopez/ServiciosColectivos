@@ -13,6 +13,7 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
     private Integer numeroPoliza;
     private Integer secuenciaPoliza;
     private Integer numeroGrupo;
+    private String tipoBeneficiario;
     /*
     private String rutTitular;
     private Integer numeroCarga;
@@ -25,12 +26,13 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
 
 
     public GetPrestacionesPorGrupoIn(Integer prefijoPoliza, Integer numeroPoliza, Integer secuenciaPoliza,
-                                     Integer numeroGrupo) {
+                                     Integer numeroGrupo, String tipoBeneficiario) {
         super();
         this.prefijoPoliza = prefijoPoliza;
         this.numeroPoliza = numeroPoliza;
         this.secuenciaPoliza = secuenciaPoliza;
         this.numeroGrupo = numeroGrupo;
+        this.tipoBeneficiario = tipoBeneficiario;
     }
 
 
@@ -64,5 +66,14 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
 
     public Integer getNumeroGrupo() {
         return numeroGrupo;
+    }
+
+
+    public void setTipoBeneficiario(String tipoBeneficiario) {
+        this.tipoBeneficiario = tipoBeneficiario;
+    }
+
+    public String getTipoBeneficiario() {
+        return tipoBeneficiario;
     }
 }

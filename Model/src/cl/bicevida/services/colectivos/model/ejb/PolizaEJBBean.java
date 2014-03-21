@@ -275,11 +275,7 @@ public class PolizaEJBBean implements PolizaEJB {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
-        try {
-            conn = ds.getConnection();
-            stmt = conn.prepareStatement(                
-                "Select \n" + 
+        String query = "Select \n" + 
                 "  Pol.Pol_Prefijo, Pol.Pol_Numero, Pol.Pol_Secuencia, Pol.Poliza as Numero_Poliza, \n" + 
                 "  G.Grupo as grp_numero, \n" +
                 "  G.Nombre_Grupo, \n" + 
@@ -291,9 +287,13 @@ public class PolizaEJBBean implements PolizaEJB {
                 "From Salud.Polizas Pol\n" + 
                 "Join Salud.Grupos G \n" + 
                 "  On Pol.poliza = G.Poliza\n" + 
-                "Join Salud.Planes PlAs\n" + 
-                "  On G.Plan_Para_Asegurados = PlAs.Plan\n" + 
-                "Join Salud.Plan_Prestaciones PlPre\n" + 
+                "Join Salud.Planes PlAs\n";
+                if (gppgIn.getTipoBeneficiario().equalsIgnoreCase("AS")) {
+                    query = query + "  On G.Plan_Para_Asegurados = PlAs.Plan\n";
+                } else {
+                    query = query + "  On G.Plan_Para_Cargas = PlAs.Plan\n";
+                }
+                query = query + "Join Salud.Plan_Prestaciones PlPre\n" + 
                 "  On PlAs.Plan = PlPre.Plan\n" + 
                 "Join Salud.Prestaciones Pre\n" + 
                 "  On PlPre.Prestacion = Pre.Prestacion\n" + 
@@ -304,7 +304,10 @@ public class PolizaEJBBean implements PolizaEJB {
                 "  And\n" + 
                 "  Pre.Prestacion_Basica In ('AMB', 'HOS')\n" + 
                 "Order By Pre.Prestacion"
-            );
+        ;
+        try {
+            conn = ds.getConnection();
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, gppgIn.getPrefijoPoliza());
             stmt.setInt(2, gppgIn.getNumeroPoliza());
             stmt.setInt(3, gppgIn.getSecuenciaPoliza());
@@ -342,8 +345,8 @@ public class PolizaEJBBean implements PolizaEJB {
         PlanPrestacionDTO result = new PlanPrestacionDTO();
         result.setCodigoPlan(rs.getString("plan"));
         result.setCodigoPrestacion(rs.getString("prestacion"));
-        result.setNombrePlan("descripcion_de_plan");
-        result.setNombrePrestacion("descripcion_de_prestacion");
+        result.setNombrePlan(rs.getString("descripcion_de_plan"));
+        result.setNombrePrestacion(rs.getString("descripcion_de_prestacion"));
         return result;
     }
 }

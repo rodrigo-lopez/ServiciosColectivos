@@ -88,10 +88,11 @@ public class PolizasRestService {
     }
     
     @GET
-    @Path("planprestacion/{numeroPoliza}/{numeroGrupo}")
+    @Path("planprestacion/{numeroPoliza}/{numeroGrupo}/{tipoBeneficiario}")
     public List getPlanPrestacion(
             @PathParam("numeroPoliza") Integer numeroPoliza,
-            @PathParam("numeroGrupo") Integer numeroGrupo
+            @PathParam("numeroGrupo") Integer numeroGrupo,
+            @PathParam("tipoBeneficiario") String tipoBeneficiario
             ) 
     {
         response.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
@@ -102,6 +103,7 @@ public class PolizasRestService {
         in.setNumeroPoliza(Integer.parseInt(strNumPol.substring(1, strNumPol.length()-2)));
         in.setSecuenciaPoliza(Integer.parseInt(strNumPol.substring(strNumPol.length()-2)));
         in.setNumeroGrupo(numeroGrupo);
+        in.setTipoBeneficiario(tipoBeneficiario);
         GetPrestacionesPorGrupoOut out = polizaEJB.getPrestacionesPorGrupo(in);
         return out.getPlanPrestacionList();
     }
