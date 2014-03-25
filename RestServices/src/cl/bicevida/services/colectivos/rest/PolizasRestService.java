@@ -25,9 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import cl.bicevida.services.exceptions.BusinessException;
 
 @Path("polizas")
 public class PolizasRestService {
@@ -39,16 +42,24 @@ public class PolizasRestService {
     HttpServletResponse response;
     
     
-    public PolizasRestService() throws NamingException {
+    public PolizasRestService() throws BusinessException {
         super();
-        final Context context = getInitialContext();
-        polizaEJB = (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.services.colectivos.model.ejb.PolizaEJB");        
+        final Context context;
+        try {
+            context = getInitialContext();
+            polizaEJB = (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.services.colectivos.model.ejb.PolizaEJB");        
+        } catch (NamingException e) {
+            throw new BusinessException("Imposible establecer comunicación con el servicio", e);
+        }
+        
     }
 
     @GET
     @Path("{numeroPoliza}")
     @Produces({"application/json", "application/xml"})
-    public PolizaDTO getPoliza(@PathParam("numeroPoliza") Integer numeroPoliza) throws NamingException {        
+    public PolizaDTO getPoliza(@PathParam("numeroPoliza") Integer numeroPoliza) throws BusinessException {
+        if (1==1)
+            throw new BusinessException("Error!", new Exception("Más Error"));
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetPolizaIn gpIn = new GetPolizaIn();
@@ -73,7 +84,7 @@ public class PolizasRestService {
     @Path("grupofamiliar/{numeroPoliza}/{rutTitular}")
     public List <AseguradoDTO> getGrupoFamiliar(
             @PathParam("numeroPoliza") Integer numeroPoliza, 
-            @PathParam("rutTitular") String rutTitular) 
+            @PathParam("rutTitular") String rutTitular) throws BusinessException
     {
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
@@ -93,7 +104,7 @@ public class PolizasRestService {
             @PathParam("numeroPoliza") Integer numeroPoliza,
             @PathParam("numeroGrupo") Integer numeroGrupo,
             @PathParam("tipoBeneficiario") String tipoBeneficiario
-            ) 
+            )  throws BusinessException
     {
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
@@ -109,9 +120,9 @@ public class PolizasRestService {
     }
     
     
-    @GET
+    @PUT
     @Path("test")
-    public List <String> getList() {
+    public List <String> getList()  throws BusinessException {
         List <String> result = new ArrayList <String>();
         result.add("hola");
         return result;
