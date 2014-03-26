@@ -115,7 +115,7 @@ public class PolizasRestService {
         in.setSecuenciaPoliza(Integer.parseInt(strNumPol.substring(strNumPol.length()-2)));
         in.setNumeroGrupo(numeroGrupo);
         in.setTipoBeneficiario(tipoBeneficiario);
-        GetPrestacionesPorGrupoOut out = polizaEJB.getPrestacionesPorGrupo(in);
+        GetPrestacionesPorGrupoOut out = polizaEJB.getPlanPrestacionAsegurado(in);
         return out.getPlanPrestacionList();
     }
     

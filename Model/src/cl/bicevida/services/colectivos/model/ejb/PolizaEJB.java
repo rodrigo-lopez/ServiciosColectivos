@@ -21,5 +21,5 @@ public interface PolizaEJB {
 
     GetGrupoFamiliarOut getGrupoFamiliar(GetGrupoFamiliarIn ggfIn);
 
-    GetPrestacionesPorGrupoOut getPrestacionesPorGrupo(GetPrestacionesPorGrupoIn gppgIn);
+    GetPrestacionesPorGrupoOut getPlanPrestacionAsegurado(GetPrestacionesPorGrupoIn gppgIn);
 }

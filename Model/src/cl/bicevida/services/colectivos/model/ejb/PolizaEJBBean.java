@@ -15,6 +15,7 @@ import cl.bicevida.services.colectivos.model.ejb.dto.GrupoDTO;
 import cl.bicevida.services.colectivos.model.ejb.dto.PlanPrestacionDTO;
 import cl.bicevida.services.colectivos.model.ejb.dto.PolizaDTO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 
 import java.sql.Date;
@@ -32,6 +33,8 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 import javax.sql.DataSource;
+
+import oracle.jdbc.OracleTypes;
 
 @Stateless(name = "PolizaEJB", mappedName = "ServiciosColectivos-PolizaEJB")
 public class PolizaEJBBean implements PolizaEJB {
@@ -124,39 +127,23 @@ public class PolizaEJBBean implements PolizaEJB {
         return result;
     }
     
-    
+    /*Devuelve las pólizas vigentes del asegurado titular*/
     public GetPolizaMasNuevaLiquidableByTitularOut getPolizaMasNuevaLiquidableByTitular(GetPolizaMasNuevaLiquidableByTitularIn gpvbtIn) {
         GetPolizaMasNuevaLiquidableByTitularOut result = new GetPolizaMasNuevaLiquidableByTitularOut();
         Connection conn = null;
         PolizaDTO poliza = null;
-        PreparedStatement stmt = null;
+        CallableStatement stmt = null;
         ResultSet rs = null;
         Integer iRut = null;
         
         iRut = Integer.parseInt(gpvbtIn.getRut().split("-")[0]);
         try {
             conn = ds.getConnection();
-            stmt = conn.prepareStatement(                
-                "Select p.Pol_Prefijo || p.Pol_Numero || Lpad(p.Pol_Secuencia, 2, '0') as numero_poliza, a.ase_numero, a.grp_numero, a.car_numero, P.*\n" + 
-                "From Bvnet_Vw_Poliza_Salud P Join Bvnet_Vw_Asegu_Tit_Salud A\n" + 
-                "  On P.Pol_Prefijo = A.Pol_Prefijo\n" + 
-                "    And P.Pol_Numero = A.Pol_Numero \n" + 
-                "    And P.Pol_Secuencia = A.Pol_Secuencia\n" + 
-                "Where \n" + 
-                "  A.Ase_Rut = ? And \n" + 
-                "  A.car_numero = 0 And\n" + 
-                "  Trunc(P.Pol_Termino_Vigencia + P.Pol_Plazo_Presentacion_Gastos)>= Trunc(Sysdate) And \n" + 
-                "  P.Con_Rut = 70016160\n" + 
-                "\n" + 
-                "  And P.Pol_Secuencia >= All (\n" + 
-                "    Select P2.Pol_Secuencia\n" + 
-                "    From Bvnet_Vw_Poliza_Salud P2\n" + 
-                "    Where P.Pol_Prefijo = P2.Pol_Prefijo And P.Pol_Numero = P2.Pol_Numero\n" + 
-                "    And Trunc(P2.Pol_Termino_Vigencia + P2.Pol_Plazo_Presentacion_Gastos) >= Trunc(Sysdate)\n" + 
-                ")\n"
-            );
-            stmt.setInt(1, iRut);
-            rs = stmt.executeQuery();
+            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Pol_Vig_Ase_Tit(?, ?)}");
+            stmt.setObject("P_RUT", iRut);
+            stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
+            stmt.execute();
+            rs = (ResultSet)stmt.getObject("P_CUR");
             while (rs.next()) {
                 poliza = mapeoPoliza(rs);
                 result.setPoliza(poliza);
@@ -270,7 +257,7 @@ public class PolizaEJBBean implements PolizaEJB {
     }        
     
     
-    public GetPrestacionesPorGrupoOut getPrestacionesPorGrupo(GetPrestacionesPorGrupoIn gppgIn) {
+    public GetPrestacionesPorGrupoOut getPlanPrestacionAsegurado(GetPrestacionesPorGrupoIn gppgIn) {
         GetPrestacionesPorGrupoOut result = new GetPrestacionesPorGrupoOut();
         Connection conn = null;
         PreparedStatement stmt = null;
