@@ -12,7 +12,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>jersey</servlet-name>
+    <servlet-name>jersey</servlet-name> 
     <url-pattern>/jersey/*</url-pattern>
   </servlet-mapping>
 </web-app>

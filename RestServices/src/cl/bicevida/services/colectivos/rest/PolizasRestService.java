@@ -55,6 +55,18 @@ public class PolizasRestService {
     }
 
     @GET
+    @Path("titular/{rut}")
+    @Produces({"application/json", "application/xml"})
+    public PolizaDTO getPolizaMasNuevaLiquidableByTitular(@PathParam("rut") String rut) throws NamingException {        
+        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        GetPolizaMasNuevaLiquidableByTitularIn in = new GetPolizaMasNuevaLiquidableByTitularIn();
+        in.setRut(rut);
+        GetPolizaMasNuevaLiquidableByTitularOut result = polizaEJB.getPolizaMasNuevaLiquidableByTitular(in);
+        return result.getPoliza();
+    }   
+    
+    @GET
     @Path("{numeroPoliza}")
     @Produces({"application/json", "application/xml"})
     public PolizaDTO getPoliza(@PathParam("numeroPoliza") Integer numeroPoliza) throws BusinessException {
@@ -68,17 +80,7 @@ public class PolizasRestService {
         return result.getPoliza();
     }
     
-    @GET
-    @Path("titular/{rut}")
-    @Produces({"application/json", "application/xml"})
-    public PolizaDTO getPolizaMasNuevaLiquidableByTitular(@PathParam("rut") String rut) throws NamingException {        
-        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        GetPolizaMasNuevaLiquidableByTitularIn in = new GetPolizaMasNuevaLiquidableByTitularIn();
-        in.setRut(rut);
-        GetPolizaMasNuevaLiquidableByTitularOut result = polizaEJB.getPolizaMasNuevaLiquidableByTitular(in);
-        return result.getPoliza();
-    }    
+ 
     
     @GET
     @Path("grupofamiliar/{numeroPoliza}/{rutTitular}")
@@ -90,10 +92,14 @@ public class PolizasRestService {
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetGrupoFamiliarIn ggfIn = new GetGrupoFamiliarIn();
         ggfIn.setRutAsegurado(rutTitular);
+        ggfIn.setFechaAtencion("05/03/2014");
+        ggfIn.setFechaPresentacionGastos("27/03/2014");
+        
         String strNumPol = numeroPoliza.toString();
         ggfIn.setPrefijoPoliza(Integer.parseInt(strNumPol.substring(0,1)));
         ggfIn.setNumeroPoliza(Integer.parseInt(strNumPol.substring(1, strNumPol.length()-2)));
         ggfIn.setSecuenciaPoliza(Integer.parseInt(strNumPol.substring(strNumPol.length()-2)));
+        
         GetGrupoFamiliarOut result = polizaEJB.getGrupoFamiliar(ggfIn);
         return result.getAseguradoList();
     }

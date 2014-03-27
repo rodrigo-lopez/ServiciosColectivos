@@ -208,37 +208,19 @@ public class PolizaEJBBean implements PolizaEJB {
     public GetGrupoFamiliarOut getGrupoFamiliar(GetGrupoFamiliarIn ggfIn) {
         GetGrupoFamiliarOut result = new GetGrupoFamiliarOut();
         Connection conn = null;
-        PreparedStatement stmt = null;
+        CallableStatement stmt = null;
         AseguradoDTO asegurado = null;
         ResultSet rs = null;
         Integer iRut = null;
-        
-        
+
         iRut = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0]);
-        try {
+        try {            
             conn = ds.getConnection();
-            stmt = conn.prepareStatement(                
-                "Select \n" + 
-                "  Trim(Substr(Ase_Nombre, 1, Instr(Ase_Nombre, '+', 1, 1)-1)) As Ase_Primer_Apellido, \n" + 
-                "  Trim(Substr(Ase_Nombre, Instr(Ase_Nombre, '+', 1, 1)+1, Instr(Ase_Nombre, '+', 1, 2) - Instr(Ase_Nombre, '+', 1, 1)-1)) As Ase_Segundo_Apellido, \n" + 
-                "  Trim(Substr(Ase_Nombre, Instr(Ase_Nombre, '+', 1, 2)+1, Length(Ase_Nombre) - Instr(Ase_Nombre, '+', 1, 2))) As Ase_Nombre_Pila, \n" + 
-                "  A1.*\n" + 
-                "From Bicevidanet.Bvnet_Vw_Asegurado_Salud a1\n" + 
-                "Where \n" + 
-                " Pol_Prefijo = ? And Pol_Numero = ? And Pol_Secuencia = ?\n" + 
-                " And Ase_Numero = (\n" + 
-                "    Select Ase_Numero \n" + 
-                "    From Bicevidanet.Bvnet_Vw_Asegurado_Salud A2 \n" + 
-                "    Where A1.Pol_Prefijo = A2.Pol_Prefijo	And A1.Pol_Numero = A2.Pol_Numero	And A1.Pol_Secuencia = A2.Pol_Secuencia And A1.Grp_Numero = A2.Grp_Numero\n" + 
-                "    And A2.Car_Numero = 0 And A2.Ase_Rut = ?\n" + 
-                " )\n" +
-                "Order by A1.car_numero"
-            );
-            stmt.setInt(1, ggfIn.getPrefijoPoliza());
-            stmt.setInt(2, ggfIn.getNumeroPoliza());
-            stmt.setInt(3, ggfIn.getSecuenciaPoliza());
-            stmt.setInt(4, iRut);
-            rs = stmt.executeQuery();
+            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Grupo_Familiar_Fechas(?, ?)}");
+            stmt.setObject("P_RUT", iRut);
+            stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
+            stmt.execute();
+            rs = (ResultSet)stmt.getObject("P_CUR");
             while (rs.next()) {
                 asegurado = mapeoAsegurado(rs);
                 result.addAsegurado(asegurado);

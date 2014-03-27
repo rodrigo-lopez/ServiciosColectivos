@@ -13,18 +13,22 @@ public class GetGrupoFamiliarIn implements Serializable {
     private Integer numeroPoliza;
     private Integer secuenciaPoliza;
     private String rutAsegurado;
+    private String fechaAtencion;
+    private String fechaPresentacionGastos;
 
     public GetGrupoFamiliarIn() {
         super();
     }
 
     public GetGrupoFamiliarIn(Integer prefijoPoliza, Integer numeroPoliza, Integer secuenciaPoliza,
-                              String rutAsegurado) {
+                              String rutAsegurado, String fechaAtencion, String fechaPresentacionGastos) {
         super();
         this.prefijoPoliza = prefijoPoliza;
         this.numeroPoliza = numeroPoliza;
         this.secuenciaPoliza = secuenciaPoliza;
         this.rutAsegurado = rutAsegurado;
+        this.fechaAtencion = fechaAtencion;
+        this.fechaPresentacionGastos = fechaPresentacionGastos;
     }
 
 
@@ -59,4 +63,20 @@ public class GetGrupoFamiliarIn implements Serializable {
     public String getRutAsegurado() {
         return rutAsegurado;
     }
+    
+    public void setFechaAtencion(String fechaAtencion) {
+        this.fechaAtencion = fechaAtencion;
+    }
+
+    public String getFechaAtencion() {
+        return fechaAtencion;
+    }   
+    
+    public void setFechaPresentacionGastos(String fechaPresentacionGastos) {
+        this.fechaPresentacionGastos = fechaPresentacionGastos;
+    }
+
+    public String getFechaPresentacionGastos() {
+        return fechaPresentacionGastos;
+    }  
 }

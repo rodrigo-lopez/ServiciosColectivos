@@ -19,7 +19,7 @@ public class PolizaEJBClient {
                 (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
             
             GetPolizaIn gpIn = new GetPolizaIn();
-            gpIn.setNumeroPoliza(143915);
+            gpIn.setNumeroPoliza(816500);
             GetPolizaOut result = polizaEJB.getPoliza(gpIn);
             System.out.println(result.getPoliza().getContratante().getNombre());
             
