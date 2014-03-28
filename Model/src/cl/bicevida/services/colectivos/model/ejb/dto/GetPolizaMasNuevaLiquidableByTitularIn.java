@@ -10,14 +10,16 @@ public class GetPolizaMasNuevaLiquidableByTitularIn implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String rut;
+    private String fecha;
 
     public GetPolizaMasNuevaLiquidableByTitularIn() {
         super();
     }
 
-    public GetPolizaMasNuevaLiquidableByTitularIn(String rut) {
+    public GetPolizaMasNuevaLiquidableByTitularIn(String rut, String fecha) {
         super();
         this.rut = rut;
+        this.fecha = fecha;
     }
 
     public void setRut(String rut) {
@@ -26,5 +28,12 @@ public class GetPolizaMasNuevaLiquidableByTitularIn implements Serializable {
 
     public String getRut() {
         return rut;
+    }
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getFecha() {
+        return fecha;
     }
 }

@@ -135,8 +135,9 @@ public class PolizaEJBBean implements PolizaEJB {
         CallableStatement stmt = null;
         ResultSet rs = null;
         Integer iRut = null;
-        
+
         iRut = Integer.parseInt(gpvbtIn.getRut().split("-")[0]);
+        
         try {
             conn = ds.getConnection();
             stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Pol_Vig_Ase_Tit(?, ?)}");
@@ -212,12 +213,14 @@ public class PolizaEJBBean implements PolizaEJB {
         AseguradoDTO asegurado = null;
         ResultSet rs = null;
         Integer iRut = null;
-
+        String fecha = null;
         iRut = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0]);
+        fecha = ggfIn.getFechaAtencion();
         try {            
             conn = ds.getConnection();
-            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Grupo_Familiar_Fechas(?, ?)}");
+            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Grupo_Familiar_Fechas(?, ?, ?)}");
             stmt.setObject("P_RUT", iRut);
+            stmt.setObject("P_Fecha_Atencion",fecha);
             stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
             stmt.execute();
             rs = (ResultSet)stmt.getObject("P_CUR");
