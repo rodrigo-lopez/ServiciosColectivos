@@ -55,14 +55,18 @@ public class PolizasRestService {
     }
 
     @GET
-    @Path("titular/{rut}/{fecha}")
+    @Path("titular/{rutAsegurado}/{fechaAtencion}/{rutUsuario}")
     @Produces({"application/json", "application/xml"})
-    public PolizaDTO getPolizaMasNuevaLiquidableByTitular(@PathParam("rut") String rut, @PathParam("fecha") String fecha) throws NamingException {        
+    public PolizaDTO getPolizaMasNuevaLiquidableByTitular(
+            @PathParam("rutAsegurado") String rutAsegurado, 
+            @PathParam("fechaAtencion") String fechaAtencion,
+            @PathParam("rutUsuario") String rutUsuario) throws NamingException {        
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetPolizaMasNuevaLiquidableByTitularIn in = new GetPolizaMasNuevaLiquidableByTitularIn();
-        in.setRut(rut);
-        in.setFecha(fecha);
+        in.setRutAsegurado(rutAsegurado);
+        in.setFechaAtencion(fechaAtencion);
+        in.setRutUsuario(rutUsuario);
         GetPolizaMasNuevaLiquidableByTitularOut result = polizaEJB.getPolizaMasNuevaLiquidableByTitular(in);
         return result.getPoliza();
     }   
@@ -81,19 +85,16 @@ public class PolizasRestService {
         return result.getPoliza();
     }
     
- 
-    
     @GET
-    @Path("grupofamiliar/{numeroPoliza}/{rutTitular}/{fechaAtencion}")
+    @Path("grupofamiliar/{numeroPoliza}/{rutAsegurado}/{fechaAtencion}")
     public List <AseguradoDTO> getGrupoFamiliar(
             @PathParam("numeroPoliza") Integer numeroPoliza, 
-            @PathParam("rutTitular") String rutTitular, 
-            @PathParam("fechaAtencion") String fechaAtencion) throws BusinessException
-    {
+            @PathParam("rutAsegurado") String rutAsegurado, 
+            @PathParam("fechaAtencion") String fechaAtencion) throws BusinessException{
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
         response.addHeader("Access-Control-Allow-Credentials", "true");
         GetGrupoFamiliarIn ggfIn = new GetGrupoFamiliarIn();
-        ggfIn.setRutAsegurado(rutTitular);
+        ggfIn.setRutAsegurado(rutAsegurado);
         ggfIn.setFechaAtencion(fechaAtencion);
         
         String strNumPol = numeroPoliza.toString();
@@ -106,11 +107,12 @@ public class PolizasRestService {
     }
     
     @GET
-    @Path("planprestacion/{numeroPoliza}/{numeroGrupo}/{tipoBeneficiario}")
+    @Path("planprestacion/{numeroPoliza}/{numeroGrupo}/{numeroAsegurado}/{numeroCarga}")
     public List getPlanPrestacion(
             @PathParam("numeroPoliza") Integer numeroPoliza,
             @PathParam("numeroGrupo") Integer numeroGrupo,
-            @PathParam("tipoBeneficiario") String tipoBeneficiario
+            @PathParam("numeroAsegurado") Integer numeroAsegurado,
+            @PathParam("numeroCarga") Integer numeroCarga  
             )  throws BusinessException
     {
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
@@ -121,7 +123,8 @@ public class PolizasRestService {
         in.setNumeroPoliza(Integer.parseInt(strNumPol.substring(1, strNumPol.length()-2)));
         in.setSecuenciaPoliza(Integer.parseInt(strNumPol.substring(strNumPol.length()-2)));
         in.setNumeroGrupo(numeroGrupo);
-        in.setTipoBeneficiario(tipoBeneficiario);
+        in.setNumeroAsegurado(numeroAsegurado);
+        in.setNumeroCarga(numeroCarga);
         GetPrestacionesPorGrupoOut out = polizaEJB.getPlanPrestacionAsegurado(in);
         return out.getPlanPrestacionList();
     }

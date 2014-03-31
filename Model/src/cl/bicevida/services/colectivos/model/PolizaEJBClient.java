@@ -15,8 +15,7 @@ public class PolizaEJBClient {
     public static void main(String[] args) {
         try {
             final Context context = getInitialContext();
-            PolizaEJB polizaEJB =
-                (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
+            PolizaEJB polizaEJB = (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
             
             GetPolizaIn gpIn = new GetPolizaIn();
             gpIn.setNumeroPoliza(816500);

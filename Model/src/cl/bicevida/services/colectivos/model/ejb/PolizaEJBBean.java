@@ -45,8 +45,7 @@ public class PolizaEJBBean implements PolizaEJB {
     
     public PolizaEJBBean() {
     }
-    
-    
+ 
     private static PolizaDTO mapeoPoliza(ResultSet rs) throws SQLException {
         PolizaDTO poliza = new PolizaDTO();
         Calendar cal = null;
@@ -94,7 +93,6 @@ public class PolizaEJBBean implements PolizaEJB {
         return poliza;
     }
     
-    
     public GetPolizaOut getPoliza(GetPolizaIn gpIn) {
         GetPolizaOut result = new GetPolizaOut();
         Connection conn = null;
@@ -127,21 +125,24 @@ public class PolizaEJBBean implements PolizaEJB {
         return result;
     }
     
-    /*Devuelve las pólizas vigentes del asegurado titular*/
+
     public GetPolizaMasNuevaLiquidableByTitularOut getPolizaMasNuevaLiquidableByTitular(GetPolizaMasNuevaLiquidableByTitularIn gpvbtIn) {
         GetPolizaMasNuevaLiquidableByTitularOut result = new GetPolizaMasNuevaLiquidableByTitularOut();
         Connection conn = null;
         PolizaDTO poliza = null;
         CallableStatement stmt = null;
         ResultSet rs = null;
-        Integer iRut = null;
+        Integer iRutTitular = null;
+        Integer iRutUsuario = null;
 
-        iRut = Integer.parseInt(gpvbtIn.getRut().split("-")[0]);
+        iRutTitular = Integer.parseInt(gpvbtIn.getRutAsegurado().split("-")[0]);
+        iRutUsuario = Integer.parseInt(gpvbtIn.getRutUsuario().split("-")[0]);
         
         try {
             conn = ds.getConnection();
-            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Pol_Vig_Ase_Tit(?, ?)}");
-            stmt.setObject("P_RUT", iRut);
+            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Pol_Vig_Ase_Tit(?, ?, ?)}");
+            stmt.setObject("P_RUT", iRutTitular);
+            stmt.setObject("P_RUT_USUARIO", iRutUsuario);
             stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
             stmt.execute();
             rs = (ResultSet)stmt.getObject("P_CUR");
@@ -161,7 +162,6 @@ public class PolizaEJBBean implements PolizaEJB {
         }
         return result;
     }    
-    
     
     private static AseguradoDTO mapeoAsegurado(ResultSet rs) throws SQLException {
         AseguradoDTO asegurado = new AseguradoDTO();
@@ -189,11 +189,15 @@ public class PolizaEJBBean implements PolizaEJB {
         asegurado.setNumeroAsegurado(rs.getInt("ase_numero"));
         asegurado.setNumeroCarga(rs.getInt("car_numero"));
         asegurado.setPrimerApellido(rs.getString("ase_primer_apellido"));
-        asegurado.setRelacion(rs.getString("ase_relacion"));
+        asegurado.setRelacion(rs.getString("relacion"));
         asegurado.setRut(rs.getInt("rut_carga"));
         asegurado.setSegundoApellido(rs.getString("ase_segundo_apellido"));
         asegurado.setSexo(rs.getString("ase_sexo"));
-        
+        asegurado.setPolNumero(rs.getInt("Pol_numero"));
+        asegurado.setPolPrefijo(rs.getInt("Pol_Prefijo"));
+        asegurado.setPolSecuencia(rs.getInt("Pol_Secuencia"));
+
+
         if (rs.getDate("ase_vigencia_hasta") != null) {
             cal = Calendar.getInstance();
             cal.setTime(rs.getDate("ase_vigencia_hasta"));
@@ -205,22 +209,22 @@ public class PolizaEJBBean implements PolizaEJB {
         return asegurado;
     }
     
-    
     public GetGrupoFamiliarOut getGrupoFamiliar(GetGrupoFamiliarIn ggfIn) {
         GetGrupoFamiliarOut result = new GetGrupoFamiliarOut();
         Connection conn = null;
         CallableStatement stmt = null;
         AseguradoDTO asegurado = null;
         ResultSet rs = null;
-        Integer iRut = null;
-        String fecha = null;
-        iRut = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0]);
-        fecha = ggfIn.getFechaAtencion();
+        Integer iRutTitular = null;
+        String fechaAtencion = null;
+        
+        iRutTitular = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0]);
+        fechaAtencion = ggfIn.getFechaAtencion();
         try {            
             conn = ds.getConnection();
             stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Grupo_Familiar_Fechas(?, ?, ?)}");
-            stmt.setObject("P_RUT", iRut);
-            stmt.setObject("P_Fecha_Atencion",fecha);
+            stmt.setObject("P_RUT", iRutTitular);
+            stmt.setObject("P_FECHA_ATENCION",fechaAtencion);
             stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
             stmt.execute();
             rs = (ResultSet)stmt.getObject("P_CUR");
@@ -245,46 +249,36 @@ public class PolizaEJBBean implements PolizaEJB {
     public GetPrestacionesPorGrupoOut getPlanPrestacionAsegurado(GetPrestacionesPorGrupoIn gppgIn) {
         GetPrestacionesPorGrupoOut result = new GetPrestacionesPorGrupoOut();
         Connection conn = null;
-        PreparedStatement stmt = null;
+        CallableStatement stmt = null;
         ResultSet rs = null;
-        String query = "Select \n" + 
-                "  Pol.Pol_Prefijo, Pol.Pol_Numero, Pol.Pol_Secuencia, Pol.Poliza as Numero_Poliza, \n" + 
-                "  G.Grupo as grp_numero, \n" +
-                "  G.Nombre_Grupo, \n" + 
-                "  PlAs.descripcion_de_plan,\n" + 
-                "  Pre.Descripcion_De_Prestacion,\n" + 
-                "  Pre.Prestacion_Por_Defecto,\n" + 
-                "  Pre.Flag_Reembolso_Diferenciado,\n" + 
-                "  PlPre.*  \n" + 
-                "From Salud.Polizas Pol\n" + 
-                "Join Salud.Grupos G \n" + 
-                "  On Pol.poliza = G.Poliza\n" + 
-                "Join Salud.Planes PlAs\n";
-                if (gppgIn.getTipoBeneficiario().equalsIgnoreCase("AS")) {
-                    query = query + "  On G.Plan_Para_Asegurados = PlAs.Plan\n";
-                } else {
-                    query = query + "  On G.Plan_Para_Cargas = PlAs.Plan\n";
-                }
-                query = query + "Join Salud.Plan_Prestaciones PlPre\n" + 
-                "  On PlAs.Plan = PlPre.Plan\n" + 
-                "Join Salud.Prestaciones Pre\n" + 
-                "  On PlPre.Prestacion = Pre.Prestacion\n" + 
-                "Where \n" + 
-                "  Pol.pol_prefijo = ? and pol.pol_numero = ? and pol.pol_secuencia = ?\n" + 
-                "  And\n" + 
-                "  G.Grupo = ?\n" + 
-                "  And\n" + 
-                "  Pre.Prestacion_Basica In ('AMB', 'HOS')\n" + 
-                "Order By Pre.Prestacion"
-        ;
-        try {
+        
+        Integer prefijoPoliza = null;
+        Integer numeroPoliza = null;
+        Integer secuenciaPoliza = null;
+        Integer numeroGrupo = null;
+        Integer numeroAsegurado = null;
+        Integer numeroCarga = null;
+        
+        prefijoPoliza = gppgIn.getPrefijoPoliza();
+        numeroPoliza = gppgIn.getNumeroPoliza();
+        secuenciaPoliza = gppgIn.getSecuenciaPoliza();
+        numeroGrupo = gppgIn.getNumeroGrupo();
+        numeroAsegurado = gppgIn.getNumeroAsegurado();
+        numeroCarga = gppgIn.getNumeroCarga();
+        
+
+        try {   
             conn = ds.getConnection();
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, gppgIn.getPrefijoPoliza());
-            stmt.setInt(2, gppgIn.getNumeroPoliza());
-            stmt.setInt(3, gppgIn.getSecuenciaPoliza());
-            stmt.setInt(4, gppgIn.getNumeroGrupo());
-            rs = stmt.executeQuery();
+            stmt = conn.prepareCall("{call Bicevidanet.Mll_Pkg_Consultas.Get_Plan_Prestacion_Asegu(?, ?, ?, ?, ?, ?, ?)}");
+            stmt.setObject("P_Pol_Prefijo",prefijoPoliza);
+            stmt.setObject("P_Pol_Numero",numeroPoliza);
+            stmt.setObject("P_Pol_Secuencia",secuenciaPoliza);
+            stmt.setObject("P_Grupo",numeroGrupo);
+            stmt.setObject("P_Numero_Ase_Tit",numeroAsegurado);
+            stmt.setObject("P_Numero_Carga",numeroCarga);
+            stmt.registerOutParameter("P_CUR", OracleTypes.CURSOR);
+            stmt.execute();
+            rs = (ResultSet)stmt.getObject("P_CUR");
             while (rs.next()) {
                 PolizaDTO poliza = mapeoPoliza(rs);
                 GrupoDTO grupo = mapeoGrupo(rs);

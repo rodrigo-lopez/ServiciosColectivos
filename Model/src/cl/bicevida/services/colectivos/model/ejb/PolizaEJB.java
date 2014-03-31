@@ -15,8 +15,9 @@ import javax.ejb.Remote;
 
 @Remote
 public interface PolizaEJB {
-    GetPolizaOut getPoliza(GetPolizaIn gpIn);
-
+    
+   GetPolizaOut getPoliza(GetPolizaIn gpIn);
+    
     GetPolizaMasNuevaLiquidableByTitularOut getPolizaMasNuevaLiquidableByTitular(GetPolizaMasNuevaLiquidableByTitularIn gpvbtIn);
 
     GetGrupoFamiliarOut getGrupoFamiliar(GetGrupoFamiliarIn ggfIn);

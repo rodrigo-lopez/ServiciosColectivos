@@ -9,31 +9,42 @@ public class GetPolizaMasNuevaLiquidableByTitularIn implements Serializable {
     @SuppressWarnings("compatibility")
     private static final long serialVersionUID = 1L;
     
-    private String rut;
-    private String fecha;
+    private String rutAsegurado;
+    private String fechaAtencion;
+    private String rutUsuario;
 
     public GetPolizaMasNuevaLiquidableByTitularIn() {
         super();
     }
 
-    public GetPolizaMasNuevaLiquidableByTitularIn(String rut, String fecha) {
+    public GetPolizaMasNuevaLiquidableByTitularIn(String rutAsegurado, String fechaAtencion, String rutUsuario) {
         super();
-        this.rut = rut;
-        this.fecha = fecha;
+        this.rutAsegurado = rutAsegurado;
+        this.fechaAtencion = fechaAtencion;
+        this.rutUsuario = rutUsuario;
     }
 
-    public void setRut(String rut) {
-        this.rut = rut;
+    public void setRutAsegurado(String rutAsegurado) {
+        this.rutAsegurado = rutAsegurado;
     }
 
-    public String getRut() {
-        return rut;
+    public String getRutAsegurado() {
+        return rutAsegurado;
     }
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    
+    public void setFechaAtencion(String fechaAtencion) {
+        this.fechaAtencion = fechaAtencion;
     }
 
-    public String getFecha() {
-        return fecha;
+    public String getFechaAtencion() {
+        return fechaAtencion;
+    }
+    
+    public void setRutUsuario(String rutUsuario) {
+        this.rutUsuario = rutUsuario;
+    }
+
+    public String getRutUsuario() {
+        return rutUsuario;
     }
 }

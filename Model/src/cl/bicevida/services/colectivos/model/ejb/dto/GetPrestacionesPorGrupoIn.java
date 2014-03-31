@@ -14,6 +14,9 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
     private Integer secuenciaPoliza;
     private Integer numeroGrupo;
     private String tipoBeneficiario;
+    private Integer numeroAsegurado;
+    private Integer numeroCarga;
+    private String terminoVigencia;
     /*
     private String rutTitular;
     private Integer numeroCarga;
@@ -26,15 +29,19 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
 
 
     public GetPrestacionesPorGrupoIn(Integer prefijoPoliza, Integer numeroPoliza, Integer secuenciaPoliza,
-                                     Integer numeroGrupo, String tipoBeneficiario) {
+                                     Integer numeroGrupo, String tipoBeneficiario, Integer numeroAsegurado,
+                                     Integer numeroCarga, String terminoVigencia) {
         super();
         this.prefijoPoliza = prefijoPoliza;
         this.numeroPoliza = numeroPoliza;
         this.secuenciaPoliza = secuenciaPoliza;
         this.numeroGrupo = numeroGrupo;
         this.tipoBeneficiario = tipoBeneficiario;
+        this.numeroAsegurado = numeroAsegurado;
+        this.numeroCarga = numeroCarga;
+        this.terminoVigencia = terminoVigencia;
+        
     }
-
 
     public void setPrefijoPoliza(Integer prefijoPoliza) {
         this.prefijoPoliza = prefijoPoliza;
@@ -75,5 +82,29 @@ public class GetPrestacionesPorGrupoIn implements Serializable {
 
     public String getTipoBeneficiario() {
         return tipoBeneficiario;
+    }
+    
+    public void setNumeroAsegurado(Integer numeroAsegurado) {
+        this.numeroAsegurado = numeroAsegurado;
+    }
+
+    public Integer getNumeroAsegurado() {
+        return numeroAsegurado;
+    }
+
+    public void setNumeroCarga(Integer numeroCarga) {
+        this.numeroCarga = numeroCarga;
+    }
+
+    public Integer getNumeroCarga() {
+        return numeroCarga;
+    }
+
+    public void setTerminoVigencia(String terminoVigencia) {
+        this.terminoVigencia = terminoVigencia;
+    }
+
+    public String getTerminoVigencia() {
+        return terminoVigencia;
     }
 }

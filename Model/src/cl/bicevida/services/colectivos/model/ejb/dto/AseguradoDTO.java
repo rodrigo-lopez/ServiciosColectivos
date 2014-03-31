@@ -26,7 +26,9 @@ public class AseguradoDTO implements Serializable {
     private String sexo;
     private String relacion;    
     private Integer numeroGrupo;
-    
+    private Integer polPrefijo;
+    private Integer polNumero;
+    private Integer polSecuencia;
     
     public AseguradoDTO() {
         super();
@@ -36,7 +38,7 @@ public class AseguradoDTO implements Serializable {
     public AseguradoDTO(Integer numeroAsegurado, Integer numeroCarga, Integer rut, String dv, String nombreCompleto,
                         String nombre, String primerApellido, String segundoApellido, Calendar inicioVigencia,
                         Calendar terminoVigencia, Calendar fechaIncorporacion, Calendar fechaExclusion, String sexo,
-                        String relacion, Integer numeroGrupo) {
+                        String relacion, Integer numeroGrupo, Integer polPrefijo, Integer polNumero, Integer polSecuencia ) {
         super();
         this.numeroAsegurado = numeroAsegurado;
         this.numeroCarga = numeroCarga;
@@ -53,6 +55,9 @@ public class AseguradoDTO implements Serializable {
         this.sexo = sexo;
         this.relacion = relacion;
         this.numeroGrupo = numeroGrupo;
+        this.polPrefijo = polPrefijo;
+        this.polNumero = polNumero;
+        this.polSecuencia = polSecuencia;
     }
 
 
@@ -200,5 +205,29 @@ public class AseguradoDTO implements Serializable {
 
     public Integer getNumeroGrupo() {
         return numeroGrupo;
+    }
+    
+    public void setPolPrefijo(Integer polPrefijo) {
+        this.polPrefijo = polPrefijo;
+    }
+
+    public Integer getPolPrefijo() {
+        return polPrefijo;
+    }
+    
+    public void setPolNumero(Integer polNumero) {
+        this.polNumero = polNumero;
+    }
+
+    public Integer getPolNumero() {
+        return polNumero;
+    }
+    
+    public void setPolSecuencia(Integer polSecuencia) {
+        this.polSecuencia = polSecuencia;
+    }
+
+    public Integer getPolSecuencia() {
+        return polSecuencia;
     }
 }
