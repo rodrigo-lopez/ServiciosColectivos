@@ -14,6 +14,7 @@ public class AseguradoDTO implements Serializable {
     private Integer numeroAsegurado;
     private Integer numeroCarga;
     private Integer rut;
+    private String rutCarga;
     private String dv;
     private String nombreCompleto;
     private String nombre;
@@ -35,7 +36,7 @@ public class AseguradoDTO implements Serializable {
     }
 
 
-    public AseguradoDTO(Integer numeroAsegurado, Integer numeroCarga, Integer rut, String dv, String nombreCompleto,
+    public AseguradoDTO(Integer numeroAsegurado, Integer numeroCarga, Integer rut, String rutCarga, String dv, String nombreCompleto,
                         String nombre, String primerApellido, String segundoApellido, Calendar inicioVigencia,
                         Calendar terminoVigencia, Calendar fechaIncorporacion, Calendar fechaExclusion, String sexo,
                         String relacion, Integer numeroGrupo, Integer polPrefijo, Integer polNumero, Integer polSecuencia ) {
@@ -43,6 +44,7 @@ public class AseguradoDTO implements Serializable {
         this.numeroAsegurado = numeroAsegurado;
         this.numeroCarga = numeroCarga;
         this.rut = rut;
+        this.rutCarga = rutCarga;                                                                                                         
         this.dv = dv;
         this.nombreCompleto = nombreCompleto;
         this.nombre = nombre;
@@ -83,6 +85,13 @@ public class AseguradoDTO implements Serializable {
 
     public Integer getRut() {
         return rut;
+    }
+    public void setRutCarga(String rutCarga) {
+        this.rutCarga = rutCarga;
+    }
+
+    public String getRutCarga() {
+        return rutCarga;
     }
 
     public void setDv(String dv) {

@@ -67,7 +67,8 @@ public class PolizaEJBBean implements PolizaEJB {
 
         ContratanteDTO contratante = new ContratanteDTO();
         try {
-            contratante.setRut(rs.getInt("con_rut") + "-" + rs.getString("con_dv"));
+            contratante.setRut(rs.getString("Rut_Contratante") + "-" + rs.getString("con_dv"));
+            //contratante.setRut(rs.getInt("con_rut") + "-" + rs.getString("con_dv"));
         } catch (SQLException e) {
             ;
         }
@@ -80,7 +81,8 @@ public class PolizaEJBBean implements PolizaEJB {
         
         EmpleadorDTO empleador = new EmpleadorDTO();
         try {
-            empleador.setRut(rs.getInt("emp_rut") + "-" + rs.getString("emp_dv"));
+            empleador.setRut(rs.getString("Rut_Empleador") + "-" + rs.getString("emp_dv"));
+            //empleador.setRut(rs.getInt("emp_rut") + "-" + rs.getString("emp_dv"));
         } catch (SQLException e) {
             ;
         }
@@ -191,6 +193,7 @@ public class PolizaEJBBean implements PolizaEJB {
         asegurado.setPrimerApellido(rs.getString("ase_primer_apellido"));
         asegurado.setRelacion(rs.getString("relacion"));
         asegurado.setRut(rs.getInt("rut_carga"));
+        asegurado.setRutCarga(rs.getString("Rut_Cargas"));
         asegurado.setSegundoApellido(rs.getString("ase_segundo_apellido"));
         asegurado.setSexo(rs.getString("ase_sexo"));
         asegurado.setPolNumero(rs.getInt("Pol_numero"));
