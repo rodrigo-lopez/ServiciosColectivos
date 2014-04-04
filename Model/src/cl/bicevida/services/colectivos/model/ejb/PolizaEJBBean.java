@@ -137,8 +137,8 @@ public class PolizaEJBBean implements PolizaEJB {
         Integer iRutTitular = null;
         Integer iRutUsuario = null;
 
-        iRutTitular = Integer.parseInt(gpvbtIn.getRutAsegurado().split("-")[0]);
-        iRutUsuario = Integer.parseInt(gpvbtIn.getRutUsuario().split("-")[0]);
+        iRutTitular = Integer.parseInt(gpvbtIn.getRutAsegurado().split("-")[0].replace(".", ""));
+        iRutUsuario = Integer.parseInt(gpvbtIn.getRutUsuario().split("-")[0].replace(".", ""));
         
         try {
             conn = ds.getConnection();
@@ -220,8 +220,8 @@ public class PolizaEJBBean implements PolizaEJB {
         ResultSet rs = null;
         Integer iRutTitular = null;
         String fechaAtencion = null;
-        
-        iRutTitular = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0]);
+
+        iRutTitular = Integer.parseInt(ggfIn.getRutAsegurado().split("-")[0].replace(".",""));
         fechaAtencion = ggfIn.getFechaAtencion();
         try {            
             conn = ds.getConnection();
