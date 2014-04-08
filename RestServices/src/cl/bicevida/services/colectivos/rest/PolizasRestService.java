@@ -62,7 +62,12 @@ public class PolizasRestService {
             @PathParam("fechaAtencion") String fechaAtencion,
             @PathParam("rutUsuario") String rutUsuario) throws NamingException {        
         response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:9000");
+        response.addHeader("Access-Control-Allow-Origin", "http://aplicaciones-desa.bicevida.cl");
         response.addHeader("Access-Control-Allow-Credentials", "true");
+        
+        //System.out.println("1: " + request.getUserPrincipal().getName());
+        System.out.println("2: " + request.getRemoteUser());
+        
         GetPolizaMasNuevaLiquidableByTitularIn in = new GetPolizaMasNuevaLiquidableByTitularIn();
         in.setRutAsegurado(rutAsegurado);
         in.setFechaAtencion(fechaAtencion);
@@ -142,7 +147,7 @@ public class PolizasRestService {
         Hashtable env = new Hashtable();
         // WebLogic Server 10.x connection details
         env.put( Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory" );
-        env.put(Context.PROVIDER_URL, "t3://localhost:7101");
+        env.put(Context.PROVIDER_URL, "t3://desa-wlogic01.bicevida.cl:8701,desa-wlogic01.bicevida.cl:8702");
         return new InitialContext( env );
     }
 }

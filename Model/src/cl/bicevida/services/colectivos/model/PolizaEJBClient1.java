@@ -1,8 +1,6 @@
 package cl.bicevida.services.colectivos.model;
 
 import cl.bicevida.services.colectivos.model.ejb.PolizaEJB;
-import cl.bicevida.services.colectivos.model.ejb.dto.GetPolizaIn;
-import cl.bicevida.services.colectivos.model.ejb.dto.GetPolizaOut;
 
 import java.util.Hashtable;
 
@@ -11,17 +9,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class PolizaEJBClient {
+public class PolizaEJBClient1 {
     public static void main(String[] args) {
         try {
             final Context context = getInitialContext();
-            PolizaEJB polizaEJB = (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.liquidadorweb.model.ejb.PolizaEJB");
-            
-            GetPolizaIn gpIn = new GetPolizaIn();
-            gpIn.setNumeroPoliza(816500);
-            GetPolizaOut result = polizaEJB.getPoliza(gpIn);
-            System.out.println(result.getPoliza().getContratante().getNombre());
-            
+            PolizaEJB polizaEJB =
+                (PolizaEJB)context.lookup("ServiciosColectivos-PolizaEJB#cl.bicevida.services.colectivos.model.ejb.PolizaEJB");
         } catch (CommunicationException ex) {
             System.out.println(ex.getClass().getName());
             System.out.println(ex.getRootCause().getLocalizedMessage());
@@ -35,7 +28,7 @@ public class PolizaEJBClient {
         Hashtable env = new Hashtable();
         // WebLogic Server 10.x connection details
         env.put( Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory" );
-        env.put(Context.PROVIDER_URL, "t3://desa-wlogic01.bicevida.cl:8701");
+        env.put(Context.PROVIDER_URL, "t3://aplicaciones-desa.bicevida.cl:8701");
         return new InitialContext( env );
     }
 }
